@@ -1,0 +1,49 @@
+version: '3.5'
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure   
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  app:
+    image: gruelbox/orko:stable
+    volumes:
+      - ./data/orko/db:/app/db
+      - ./data/secret:/run/secrets:ro
+    ports:
+      - "9090:9090"
+    environment:
+      - PROXIED=true
+      - LOG_LEVEL=INFO
+      - WHITELIST_EXPIRY_SECONDS=866000
+      - SIMPLE_AUTH_TOKEN_EXPIRY_MINUTES=7500
+      - JDBC_URL='h2:file:/app/db/orko;DB_CLOSE_DELAY=-1;MVCC=TRUE;DEFAULT_LOCK_TIMEOUT=60000'
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure    
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure

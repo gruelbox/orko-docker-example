@@ -62,3 +62,36 @@ chmod -R 600 data/secret
 chmod 700 data/secret
 ```
 - Start your server: `docker-compose up -d`
+
+### Logging and support
+
+[Datadog](https://www.datadoghq.com/) and [Papertrail](https://papertrailapp.com/) have free services which work well when combined with this setup, to give you logs and real-time monitoring.
+
+To use them, set up accounts, and add the following to `docker-compose.yml`, replacing `YOUR-DATADOG-API-KEY` and `YOUR-LOGSPOUT-ENDPOINT` with the credentials from Datadog and Papertrail respectively.
+
+```
+  datadog:
+    image: datadog/agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_API_KEY=YOUR-DATADOG-API-KEY
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure   
+
+  logspout:
+    image: gliderlabs/logspout:latest
+    volumes:
+      - /etc/hostname:/etc/host_hostname:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      syslog+tls://YOUR-LOGSPOUT-ENDPOINT
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure   
+ ```

@@ -6,9 +6,9 @@
 ## What's this?
 This is a set of example configuration files demonstrating how to configure a (relatively) secure Orko instance with an SSL reverse proxy using Docker.
 
-Please note that running a secure, publicly visible server requires care, attention and a lot of learning.  This is doubly true when (like Orko) your application has to have access tounencrypted exchange API keys.  If an attacker were to gain access to those keys, they would be able to access your trading accounts.
+Please note that running a secure, publicly visible server requires care, attention and a lot of learning.  This is doubly true when (like Orko) your application has to have access to unencrypted exchange API keys.  If an attacker were to gain access to those keys, they would be able to access your trading accounts.
 
-**This is not an exhaustive guide, and no-one associated with Orko can be held in any way responsible for what may happen when you try and set up your own server**.
+**This is not an exhaustive guide, and no-one associated with Orko can be held in any way responsible for what may happen when you try and set up your own server.  Assume this guide contains errors and triple-check everything.  Only you can be responsible for your own security.**.
 
 However, if you know what you're doing, you may find this collection of tips useful. It is heavily based on [these fantastic instructions](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71).
 
@@ -24,4 +24,3 @@ However, if you know what you're doing, you may find this collection of tips use
 ### Steps
 
 TODO
-

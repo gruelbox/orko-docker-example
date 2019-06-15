@@ -63,7 +63,7 @@ chmod 700 data/secret
 ```
 - Start your server: `docker-compose up -d`
 
-### Logging and support
+### Logging and monitoring (optional, but not really)
 
 [Datadog](https://www.datadoghq.com/) and [Papertrail](https://papertrailapp.com/) have free services which work well when combined with this setup, to give you logs and real-time monitoring.
 

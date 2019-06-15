@@ -10,7 +10,7 @@ Please note that running a secure, publicly visible server requires care, attent
 
 **This is not an exhaustive guide, and no-one associated with Orko can be held in any way responsible for what may happen when you try and set up your own server.  Assume this guide contains errors and triple-check everything.  Only you can be responsible for your own security.**.
 
-However, if you know what you're doing, you may find this collection of tips useful. It is heavily based on [these fantastic instructions](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71).
+However, if you know what you're doing, you may find this collection of tips useful. It is heavily derived from [these fantastic instructions](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71) which come highly recommended, and the [code on which they are based](https://github.com/wmnnd/nginx-certbot).
 
 ### Prerequisites
 

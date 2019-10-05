@@ -13,10 +13,10 @@ services:
       - "443:443"
     depends_on:
       - app
-    restart: on-failure
+    restart: always
     deploy:
       restart_policy:
-        condition: on-failure   
+        condition: any 
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   app:
@@ -32,10 +32,10 @@ services:
       - WHITELIST_EXPIRY_SECONDS=866000
       - SIMPLE_AUTH_TOKEN_EXPIRY_MINUTES=7500
       - JDBC_URL='h2:file:/app/db/orko;DB_CLOSE_DELAY=-1;MVCC=TRUE;DEFAULT_LOCK_TIMEOUT=60000'
-    restart: on-failure
+    restart: always
     deploy:
       restart_policy:
-        condition: on-failure    
+        condition: any
 
   certbot:
     image: certbot/certbot
@@ -43,7 +43,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    restart: on-failure
+    restart: always
     deploy:
       restart_policy:
-        condition: on-failure
+        condition: any

@@ -9,7 +9,7 @@ email="$2" # Adding a valid address is strongly recommended
 staging=$3 # Set to 1 if you're testing your setup to avoid hitting request limits
 usenoip=$4 # Set to 1 if using no-ip
 
-if [ -d "$usenoip" ]; then
+if [ "$usenoip" -eq "1" ]; then
   echo "### Starting no-ip ..."
   set +e
   docker stop noip-temp-setup
@@ -83,7 +83,7 @@ docker run --rm \
 echo "### Shutting down temporary nginx ..."
 docker stop nginx-temp-setup
 
-if [ -d "$usenoip" ]; then
+if [ "$usenoip" -eq "1" ]; then
   echo "### Shutting down noip"
   docker stop noip-temp-setup
 fi

@@ -78,4 +78,4 @@ To use them, set up accounts, then in `docker-compose.extras.yml`, replace `YOUR
 
 To start, use:
 
-`docker-compose up -d -f docker-compose.yml -f docker-compose.noip.yml -f docker-compose.extras.yml`
+`docker-compose -f docker-compose.yml -f docker-compose.noip.yml -f docker-compose.extras.yml up -d`

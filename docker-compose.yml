@@ -1,7 +1,6 @@
-version: '3.5'
+version: "3.5"
 
 services:
-
   nginx:
     image: nginx:stable-alpine
     volumes:
@@ -16,8 +15,8 @@ services:
     restart: always
     deploy:
       restart_policy:
-        condition: any 
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+        condition: any
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
   app:
     image: gruelbox/orko:stable

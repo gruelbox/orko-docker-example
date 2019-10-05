@@ -1,0 +1,11 @@
+version: "3.5"
+
+services:
+  noip:
+    image: coppit/no-ip
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./data/noip:/config
+    deploy:
+      restart_policy:
+        condition: on-failure

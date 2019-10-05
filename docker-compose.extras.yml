@@ -1,0 +1,26 @@
+version: "3.5"
+
+services:
+  datadog:
+    image: datadog/agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_API_KEY=YOUR-DATADOG-API-KEY
+    restart: always
+    deploy:
+      restart_policy:
+        condition: any
+
+  logspout:
+    image: gliderlabs/logspout:latest
+    volumes:
+      - /etc/hostname:/etc/host_hostname:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: syslog+tls://YOUR-LOGSPOUT-ENDPOINT
+    restart: always
+    deploy:
+      restart_policy:
+        condition: any

@@ -7,6 +7,19 @@ rsa_key_size=4096
 data_path="$DIR/data/certbot"
 email="$2" # Adding a valid address is strongly recommended
 staging=$3 # Set to 1 if you're testing your setup to avoid hitting request limits
+usenoip=$4 # Set to 1 if using no-ip
+
+if [ -d "$usenoip" ]; then
+  echo "### Starting no-ip ..."
+  set +e
+  docker stop noip-temp-setup
+  set -e
+  docker run -d --rm \
+    --name noip-temp-setup \
+    -v "/etc/localtime:/etc/localtime" \
+    -v "$DIR/data/noip:/config" \
+    coppit/no-ip
+fi
 
 if [ -d "$data_path" ]; then
   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
@@ -18,8 +31,8 @@ fi
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
   echo "### Downloading recommended TLS parameters ..."
   mkdir -p "$data_path/conf"
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
+  curl -s -f https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/tls_configs/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
+  curl -s -f https://raw.githubusercontent.com/certbot/certbot/master/certbot/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
   echo
 fi
 
@@ -69,3 +82,8 @@ docker run --rm \
 
 echo "### Shutting down temporary nginx ..."
 docker stop nginx-temp-setup
+
+if [ -d "$usenoip" ]; then
+  echo "### Shutting down noip"
+  docker stop noip-temp-setup
+fi

@@ -16,7 +16,7 @@ However, if you know what you're doing, you may find this collection of tips use
 
 ### Prerequisites
 
-- Your own domain and the understanding of how to configure it.
+- Your own domain and the understanding of how to configure it to point to your server. Alternative, an account with https://www.noip.com/ and a domain configured there (we'll set it up so that the domain is automatically updated).
 - A suitable Linux-based host with:
   - No unnecessary services (such as `httpd` or `sambdad`)
   - A suitable update strategy to ensure security patches are installed quickly
@@ -31,10 +31,10 @@ However, if you know what you're doing, you may find this collection of tips use
 - `cd /opt/orko`
 - `git clone https://github.com/gruelbox/orko-docker-example.git`
 - Modify `data/nginx/app.conf`, replacing the two instances of `yourserverhere.example.com` with your domain.
-- Modify `data/noip/noip.conf`, replacing `yourserverhere.example.com` with your domain and `YOURUSERNAME` and `YOURPASSWORD` with your no-ip account details.
+- _If you're using no-ip dynamic DNS_, modify `data/noip/noip.conf`, replacing `yourserverhere.example.com` with your domain and `YOURUSERNAME` and `YOURPASSWORD` with your no-ip account details.
 - `chmod +x init-letsencrypt.sh`
-- Now test setting up your SSL certificate: `./init-letsencrypt.sh your.domain.com your@email.com 1
-- If that worked OK, you can do it for real: `./init-letsencrypt.sh your.domain.com your@email.com 0
+- Now test setting up your SSL certificate: `./init-letsencrypt.sh your.domain.com your@email.com 1`, or `./init-letsencrypt.sh your.domain.com your@email.com 1 1` if using no-ip.
+- If that worked OK, you can do it for real: `./init-letsencrypt.sh your.domain.com your@email.com 0`, or `./init-letsencrypt.sh your.domain.com your@email.com 0 1` if using no-ip.
 - `chmod +x generate-secrets.sh`
 - Generate a clean set of unused credentials: `./generate-secrets.sh`
 - Note down the credentials printed at the end. Some of these will not be shown again.
@@ -68,37 +68,14 @@ chmod -R 600 data/secret
 chmod 700 data/secret
 ```
 
-- Start your server: `docker-compose up -d`
+- Start your server: `docker-compose up -d`, or `docker-compose up -d -f docker-compose.yml -f docker.compose.noip.yml` if using no-ip.
 
 ### Logging and monitoring (optional, but not really)
 
 [Datadog](https://www.datadoghq.com/) and [Papertrail](https://papertrailapp.com/) have free services which work well when combined with this setup, to give you logs and real-time monitoring.
 
-To use them, set up accounts, and add the following to `docker-compose.yml`, replacing `YOUR-DATADOG-API-KEY` and `YOUR-LOGSPOUT-ENDPOINT` with the credentials from Datadog and Papertrail respectively.
+To use them, set up accounts, then in `docker-compose.extras.yml`, replace `YOUR-DATADOG-API-KEY` and `YOUR-LOGSPOUT-ENDPOINT` with the credentials from Datadog and Papertrail respectively.
 
-```
-  datadog:
-    image: datadog/agent:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc/:/host/proc/:ro
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-    environment:
-      - DD_API_KEY=YOUR-DATADOG-API-KEY
-    restart: on-failure
-    deploy:
-      restart_policy:
-        condition: on-failure
+To start, use:
 
-  logspout:
-    image: gliderlabs/logspout:latest
-    volumes:
-      - /etc/hostname:/etc/host_hostname:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    command:
-      syslog+tls://YOUR-LOGSPOUT-ENDPOINT
-    restart: on-failure
-    deploy:
-      restart_policy:
-        condition: on-failure
-```
+`docker-compose up -d -f docker-compose.yml -f docker-compose.noip.yml -f docker-compose.extras.yml`

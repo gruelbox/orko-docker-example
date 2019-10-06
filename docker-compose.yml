@@ -19,7 +19,7 @@ services:
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
   app:
-    image: gruelbox/orko:stable
+    image: gruelbox/orko:latest
     volumes:
       - ./data/orko/db:/app/db
       - ./data/secret:/run/secrets:ro

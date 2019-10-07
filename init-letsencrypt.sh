@@ -14,6 +14,7 @@ if [ "$usenoip" -eq "1" ]; then
   set +e
   docker stop noip-temp-setup
   set -e
+  docker pull -q coppit/no-ip
   docker run -d --rm \
     --name noip-temp-setup \
     -v "/etc/localtime:/etc/localtime" \
@@ -40,6 +41,7 @@ echo "### Starting temporary nginx ..."
 set +e
 docker stop nginx-temp-setup
 set -e
+docker pull -q nginx:stable-alpine
 docker run -d --rm \
   --name nginx-temp-setup \
   -v "$DIR/data/nginx-setup:/etc/nginx/conf.d" \
@@ -66,6 +68,7 @@ esac
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
+docker pull -q certbot/certbot
 docker run --rm \
   --name certbot-temp-setup \
   -v "$data_path/conf:/etc/letsencrypt" \

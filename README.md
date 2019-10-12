@@ -32,9 +32,11 @@ However, if you know what you're doing, you may find this collection of tips use
 - `git clone https://github.com/gruelbox/orko-docker-example.git`
 - Modify `data/nginx/app.conf`, replacing the two instances of `yourserverhere.example.com` with your domain.
 - _If you're using no-ip dynamic DNS_, modify `data/noip/noip.conf`, replacing `yourserverhere.example.com` with your domain and `YOURUSERNAME` and `YOURPASSWORD` with your no-ip account details.
+- `chmod +x no-ip-refresh.sh`
 - `chmod +x init-letsencrypt.sh`
-- Now test setting up your SSL certificate: `./init-letsencrypt.sh your.domain.com your@email.com 1`, or `./init-letsencrypt.sh your.domain.com your@email.com 1 1` if using no-ip.
-- If that worked OK, you can do it for real: `./init-letsencrypt.sh your.domain.com your@email.com 0`, or `./init-letsencrypt.sh your.domain.com your@email.com 0 1` if using no-ip.
+- If using no-ip, refresh the IP address using `./no-ip-refresh.sh`.
+- Now test setting up your SSL certificate: `./init-letsencrypt.sh your.domain.com your@email.com 1`
+- If that worked OK, you can do it for real: `./init-letsencrypt.sh your.domain.com your@email.com 0`
 - `chmod +x generate-secrets.sh`
 - Generate a clean set of unused credentials: `./generate-secrets.sh`
 - Note down the credentials printed at the end. Some of these will not be shown again.

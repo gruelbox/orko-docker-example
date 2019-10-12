@@ -7,6 +7,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - ./data/datadog:/conf.d:ro
     environment:
       - DD_API_KEY=YOUR-DATADOG-API-KEY
     restart: always

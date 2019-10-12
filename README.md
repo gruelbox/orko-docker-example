@@ -70,7 +70,7 @@ chmod -R 600 data/secret
 chmod 700 data/secret
 ```
 
-- Start your server: `docker-compose up -d`, or `docker-compose up -d -f docker-compose.yml -f docker.compose.noip.yml` if using no-ip.
+- Start your server: `docker-compose up -d`, or `docker-compose up -d -f docker-compose.yml -f noip.yml` if using no-ip.
 
 ### Logging and monitoring (optional, but not really)
 
@@ -80,4 +80,4 @@ To use them, set up accounts, then in `docker-compose.extras.yml`, replace `YOUR
 
 To start, use:
 
-`docker-compose -f docker-compose.yml -f docker-compose.noip.yml -f docker-compose.extras.yml up -d`
+`docker-compose -f docker-compose.yml -f noip.yml -f logspout.yml -f datadog.yml up -d`

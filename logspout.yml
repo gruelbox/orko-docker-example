@@ -1,0 +1,12 @@
+version: "3.5"
+
+services:
+  logspout:
+    image: gliderlabs/logspout:latest
+    volumes:
+      - /etc/hostname:/etc/host_hostname:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: syslog+tls://YOUR-LOGSPOUT-ENDPOINT
+    deploy:
+      restart_policy:
+        condition: any

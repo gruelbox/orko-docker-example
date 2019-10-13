@@ -4,15 +4,15 @@ services:
   nginx:
     image: nginx:stable-alpine
     volumes:
-      - ./data/nginx:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./data/nginx:/etc/nginx/conf.d:ro
+      - ./data/certbot/conf:/etc/letsencrypt:ro
+      - ./data/certbot/www:/var/www/certbot:ro
+      - ./data/nginxlog:/var/log/nginx:rw
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - app
-    restart: always
     deploy:
       restart_policy:
         condition: any
@@ -21,7 +21,7 @@ services:
   app:
     image: gruelbox/orko:latest
     volumes:
-      - ./data/orko/db:/app/db
+      - ./data/orko/db:/app/db:rw
       - ./data/secret:/run/secrets:ro
     ports:
       - "9090:9090"
@@ -31,7 +31,6 @@ services:
       - WHITELIST_EXPIRY_SECONDS=866000
       - SIMPLE_AUTH_TOKEN_EXPIRY_MINUTES=7500
       - JDBC_URL='h2:file:/app/db/orko;DB_CLOSE_DELAY=-1;MVCC=TRUE;DEFAULT_LOCK_TIMEOUT=60000'
-    restart: always
     deploy:
       restart_policy:
         condition: any
@@ -39,10 +38,9 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./data/certbot/conf:/etc/letsencrypt:rw
+      - ./data/certbot/www:/var/www/certbot:rw
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    restart: always
     deploy:
       restart_policy:
         condition: any

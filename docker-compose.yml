@@ -36,7 +36,7 @@ services:
       - LOG_LEVEL=INFO
       - WHITELIST_EXPIRY_SECONDS=866000
       - SIMPLE_AUTH_TOKEN_EXPIRY_MINUTES=7500
-      - JDBC_URL='h2:file:/app/db/orko;DB_CLOSE_DELAY=-1;MVCC=TRUE;DEFAULT_LOCK_TIMEOUT=60000'
+      - JDBC_URL='h2:file:/app/db/orko;DB_CLOSE_DELAY=-1;DEFAULT_LOCK_TIMEOUT=60000'
     deploy:
       restart_policy:
         condition: any
